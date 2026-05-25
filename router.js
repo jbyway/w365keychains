@@ -14,7 +14,7 @@ async function runSmartLink() {
   }
 
   const configUrl =
-    `https://raw.githubusercontent.com/yourusername/smartlink/main/routes/${slug}.json`;
+    `https://raw.githubusercontent.com/jbyway/w365keychains/main/routes/${slug}.json`;
 
   let config;
 
@@ -39,7 +39,7 @@ async function runSmartLink() {
 }
 
 function openAndroid(cfg) {
-  const scheme = cfg.scheme || "windowsapp";
+  const scheme = cfg.scheme || "windowsapp://";
   const pkg = cfg.package || "com.microsoft.rdc.androidx";
   const fallback = cfg.fallback || "https://windows.cloud.microsoft";
 
