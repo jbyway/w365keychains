@@ -56,11 +56,11 @@ function openAndroid(cfg) {
     `S.browser_fallback_url=${encodeURIComponent(cfg.fallback)};end`;
 
   // 1. Show the intent URL clearly
-  setStatus("Intent URL:<br><small>" + intentUrl + "</small>");
+  setStatus("Intent URL: " + intentUrl);
 
   // 2. Wait 3 seconds before starting countdown
   setTimeout(() => {
-    let countdown = 2;
+    let countdown = 10;
 
     setStatus(`Opening Windows App in ${countdown} seconds…`);
 
