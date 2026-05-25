@@ -1,8 +1,10 @@
+// --- STATUS DISPLAY ---
 function setStatus(msg) {
   const el = document.getElementById("status");
   if (el) el.textContent = msg;
 }
 
+// --- DEVICE DETECTION ---
 function getPlatform() {
   const ua = navigator.userAgent.toLowerCase();
   if (/android/.test(ua)) return "android";
@@ -10,33 +12,26 @@ function getPlatform() {
   return "desktop";
 }
 
-async function runSmartLink() {
-  setStatus("Loading configuration…");
+// --- DEFAULT CONFIG ---
+const config = {
+  android: {
+    scheme: "windowsapp://",
+    package: "com.microsoft.rdc.androidx",
+    fallback: "https://windows.cloud.microsoft"
+  },
+  ios: {
+    app: "windowsapp://",
+    fallback: "https://windows.cloud.microsoft"
+  },
+  desktop: "https://windows.cloud.microsoft"
+};
 
-  const params = new URLSearchParams(window.location.search);
-  const slug = params.get("slug");
-
-  if (!slug) {
-    setStatus("No slug provided, redirecting to fallback…");
-    return window.location.href = "https://windows.cloud.microsoft";
-  }
-
-  const configUrl =
-    `https://raw.githubusercontent.com/jbyway/w365keychains/main/routes/${slug}.json`;
-
-  let config;
-
-  try {
-    const res = await fetch(configUrl, { cache: "no-store" });
-    config = await res.json();
-    setStatus("Configuration loaded.");
-  } catch (err) {
-    setStatus("Failed to load config, using fallback…");
-    return window.location.href = "https://windows.cloud.microsoft";
-  }
+// --- MAIN ROUTER ---
+function runSmartLink() {
+  setStatus("Detecting platform…");
 
   const platform = getPlatform();
-  setStatus(`Detected platform: ${platform}`);
+  setStatus(`Platform detected: ${platform}`);
 
   switch (platform) {
     case "android":
@@ -48,41 +43,38 @@ async function runSmartLink() {
   }
 }
 
+// --- ANDROID HANDLER ---
 function openAndroid(cfg) {
   setStatus("Launching Windows App on Android…");
 
-  const scheme = cfg.scheme || "windowsapp://";
-  const pkg = cfg.package || "com.microsoft.rdc.androidx";
-  const fallback = cfg.fallback || "https://play.google.com/store/apps/details?id=com.microsoft.rdc.androidx";
-
   const intentUrl =
-    `intent://#Intent;scheme=${scheme};package=${pkg};` +
-    `S.browser_fallback_url=${encodeURIComponent(fallback)};end`;
+    `intent://#Intent;scheme=${cfg.scheme};package=${cfg.package};` +
+    `S.browser_fallback_url=${encodeURIComponent(cfg.fallback)};end`;
 
   setStatus("Opening intent URL…");
   window.location.href = intentUrl;
 }
 
+// --- iOS HANDLER ---
 function openIOS(cfg) {
   setStatus("Launching Windows App on iOS…");
 
-  const app = cfg.app || "windowsapp://";
-  const fallback = cfg.fallback || "https://windows.cloud.microsoft";
-
-  window.location.href = app;
+  window.location.href = cfg.app;
 
   setStatus("Waiting to see if app opens…");
 
   setTimeout(() => {
     setStatus("App did not open, redirecting to fallback…");
-    window.location.href = fallback;
+    window.location.href = cfg.fallback;
   }, 1000);
 }
 
+// --- DESKTOP HANDLER ---
 function openDesktop(url) {
   setStatus("Redirecting desktop user…");
-  window.location.href = url || "https://windows.cloud.microsoft";
+  window.location.href = url;
 }
 
+// --- AUTO-RUN ---
 document.addEventListener("DOMContentLoaded", runSmartLink);
 
