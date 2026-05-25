@@ -20,7 +20,7 @@ const config = {
     fallback: "https://windows.cloud.microsoft"
   },
   ios: {
-    app: "windowsapp://",
+    app: "rdp://",
     fallback: "https://windows.cloud.microsoft"
   },
   desktop: "https://windows.cloud.microsoft",
