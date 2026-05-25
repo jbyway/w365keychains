@@ -78,6 +78,7 @@ function openAndroid(cfg) {
       setStatus(`Opening Windows App in ${countdown} second…`);
   } else {
       window.location.href = intentUrl;
+    }
     }, 1000);
   
   
