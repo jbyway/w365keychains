@@ -15,7 +15,7 @@ function getPlatform() {
 // --- CONFIG (with Play Store fallback) ---
 const config = {
   android: {
-    scheme: "windowsapp",
+    scheme: "windowsapp://",
     package: "com.microsoft.rdc.androidx",
     fallback: "https://play.google.com/store/apps/details?id=com.microsoft.rdc.androidx"
   },
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Show debug info
   setStatus(
     `Platform detected: ${platform}<br><br>` +
-    `Intent URL:<br><small>${intentUrl}</small>`
+    `Intent URL: ${intentUrl}`
   );
 
   // --- BUTTON HANDLERS ---
