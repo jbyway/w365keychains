@@ -60,7 +60,7 @@ function openAndroid(cfg) {
 
   // 2. Wait 3 seconds before starting countdown
   setTimeout(() => {
-    let countdown = 10;
+    let countdown = 3;
 
     setStatus(`Opening Windows App in ${countdown} seconds…`);
 
@@ -76,7 +76,7 @@ function openAndroid(cfg) {
       }
     }, 1000);
 
-  }, 3000); // <-- 3 second pause before countdown
+  }, 10000); // <-- 3 second pause before countdown
 }
 
 
