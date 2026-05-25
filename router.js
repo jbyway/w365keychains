@@ -12,12 +12,12 @@ function getPlatform() {
   return "desktop";
 }
 
-// --- CONFIG (with Play Store fallback) ---
+// --- CONFIG (using your exact values) ---
 const config = {
   android: {
     scheme: "windowsapp",
     package: "com.microsoft.rdc.androidx",
-    fallback: "https://play.google.com/store/apps/details?id=com.microsoft.rdc.androidx"
+    fallback: "https://windows.cloud.microsoft"
   },
   ios: {
     app: "windowsapp://",
@@ -30,7 +30,7 @@ const config = {
 // --- BUILD INTENT URL ---
 function buildIntentURL() {
   return (
-    `intent://scan/#Intent;scheme=${config.android.scheme};package=${config.android.package};` +
+    `intent://#Intent;scheme=${config.android.scheme};package=${config.android.package};` +
     `S.browser_fallback_url=${encodeURIComponent(config.android.fallback)};end`
   );
 }
@@ -43,41 +43,34 @@ document.addEventListener("DOMContentLoaded", () => {
   // Show debug info
   setStatus(
     `Platform detected: ${platform}<br><br>` +
-    `Intent URL: ${intentUrl}`
+    `Intent URL:<br><small>${intentUrl}</small>`
   );
 
-  // --- BUTTON HANDLERS ---
+  // --- BUTTON HANDLERS (Edge-safe: direct navigation only) ---
   document.getElementById("launchApp").onclick = () => {
-    setStatus("Launching Windows App…");
     window.location.href = intentUrl;
   };
 
   document.getElementById("launchWeb").onclick = () => {
-    setStatus("Opening Web Client…");
     window.location.href = config.android.fallback;
   };
 
   document.getElementById("launchDocs").onclick = () => {
-    setStatus("Opening Windows 365 Docs…");
     window.location.href = config.docs;
   };
 
   // --- AUTO-BEHAVIOR FOR iOS ---
   if (platform === "ios") {
-    setStatus("Launching Windows App on iOS…");
     window.location.href = config.ios.app;
 
     setTimeout(() => {
-      setStatus("App did not open, redirecting to Web Client…");
       window.location.href = config.ios.fallback;
-    }, 12000);
+    }, 1200);
   }
 
   // --- AUTO-BEHAVIOR FOR DESKTOP ---
   if (platform === "desktop") {
-    setStatus("Redirecting desktop user to Web Client…");
     window.location.href = config.desktop;
   }
 });
-
 
