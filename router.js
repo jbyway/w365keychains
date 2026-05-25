@@ -15,7 +15,7 @@ function getPlatform() {
 // --- CONFIG (using your exact values) ---
 const config = {
   android: {
-    scheme: "windowsapp",
+    scheme: "rdp",
     package: "com.microsoft.rdc.androidx",
     fallback: "https://windows.cloud.microsoft"
   },
