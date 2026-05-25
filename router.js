@@ -16,8 +16,8 @@ function getPlatform() {
 const config = {
   android: {
     scheme: "windowsapp",
-    package: "com.microsoft.windowsapp",
-    fallback: "https://play.google.com/store/apps/details?id=com.microsoft.windowsapp"
+    package: "com.microsoft.rdc.androidx",
+    fallback: "https://play.google.com/store/apps/details?id=com.microsoft.rdc.androidx"
   },
   ios: {
     app: "windowsapp://",
