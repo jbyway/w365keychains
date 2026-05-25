@@ -21,9 +21,9 @@ const config = {
   },
   ios: {
     app: "windowsapp://",
-    fallback: "https://windows.cloud.microsoft.com"
+    fallback: "https://windows.cloud.microsoft"
   },
-  desktop: "https://windows.cloud.microsoft.com",
+  desktop: "https://windows.cloud.microsoft",
   docs: "https://aka.ms/w365docs"
 };
 
