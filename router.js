@@ -51,9 +51,9 @@ async function runSmartLink() {
 function openAndroid(cfg) {
   setStatus("Launching Windows App on Android…");
 
-  const scheme = cfg.scheme || "windowsapp";
-  const pkg = cfg.package || "com.microsoft.windowsapp";
-  const fallback = cfg.fallback || "https://windows.cloud.microsoft";
+  const scheme = cfg.scheme || "windowsapp://";
+  const pkg = cfg.package || "com.microsoft.rdc.androidx";
+  const fallback = cfg.fallback || "https://play.google.com/store/apps/details?id=com.microsoft.rdc.androidx";
 
   const intentUrl =
     `intent://#Intent;scheme=${scheme};package=${pkg};` +
