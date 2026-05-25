@@ -1,0 +1,13 @@
+{
+  "android": {
+    "scheme": "windowsapp://",
+    "package": "com.microsoft.rdc.androidx",
+    "fallback": "https://windows.cloud.microsoft.com"
+  },
+  "ios": {
+    "app": "windowsapp://",
+    "fallback": "https://windows.cloud.microsoft.com"
+  },
+  "desktop": "https://windows.cloud.microsoft.com"
+}
+
