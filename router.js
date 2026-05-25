@@ -69,7 +69,19 @@ function openAndroid(cfg) {
     `S.browser_fallback_url=${encodeURIComponent(cfg.fallback)};end`;
 
   setStatus("Redirecting now…");
-  window.location.href = intentUrl;
+  setStatus("Intent URL: " + intentUrl);
+  let countdown = 2;
+
+  const timer = setInterval(() => {
+    countdown -= 1;
+    if (countdown > 0) {
+      setStatus(`Opening Windows App in ${countdown} second…`);
+  } else {
+      window.location.href = intentUrl;
+    }, 1000);
+  
+  
+  
 }
 
 // --- iOS HANDLER ---
