@@ -62,28 +62,31 @@ function prepareAndroid(cfg) {
 }
 
 function openAndroid(cfg) {
-  setStatus("Launching Windows App on Android…");
-
   const intentUrl =
     `intent://#Intent;scheme=${cfg.scheme};package=${cfg.package};` +
     `S.browser_fallback_url=${encodeURIComponent(cfg.fallback)};end`;
 
-  setStatus("Redirecting now…");
-  setStatus("Intent URL: " + intentUrl);
+  setStatus("Preparing to launch Windows App…");
+
   let countdown = 2;
 
   const timer = setInterval(() => {
     countdown -= 1;
+
     if (countdown > 0) {
       setStatus(`Opening Windows App in ${countdown} second…`);
-  } else {
-      window.location.href = intentUrl;
+    } else {
+      clearInterval(timer);               // ⭐ FIXED
+      setStatus("Launching now…");
+      window.location.href = intentUrl;   // ⭐ SAFE REDIRECT
     }
-    }, 1000);
-  
-  
-  
+  }, 1000);
+
+  // Show intent URL once (for debugging)
+  console.log("Intent URL:", intentUrl);
 }
+
+
 
 // --- iOS HANDLER ---
 function openIOS(cfg) {
