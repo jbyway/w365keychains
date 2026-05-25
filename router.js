@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
       setStatus("App did not open, redirecting to Web Client…");
       window.location.href = config.ios.fallback;
-    }, 1200);
+    }, 12000);
   }
 
   // --- AUTO-BEHAVIOR FOR DESKTOP ---
