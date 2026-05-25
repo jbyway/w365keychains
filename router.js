@@ -43,48 +43,42 @@ function runSmartLink() {
   }
 }
 
-// --- ANDROID: ADD PAUSE + CLEAR INTENT ---
 function prepareAndroid(cfg) {
-  let countdown = 2;
-
-  setStatus(`Opening Windows App in ${countdown} seconds…`);
-
-  const timer = setInterval(() => {
-    countdown -= 1;
-
-    if (countdown > 0) {
-      setStatus(`Opening Windows App in ${countdown} second…`);
-    } else {
-      clearInterval(timer);
-      openAndroid(cfg);
-    }
-  }, 1000);
+  // No countdown here anymore
+  // Just hand off to openAndroid()
+  openAndroid(cfg);
 }
+
 
 function openAndroid(cfg) {
   const intentUrl =
     `intent://#Intent;scheme=${cfg.scheme};package=${cfg.package};` +
     `S.browser_fallback_url=${encodeURIComponent(cfg.fallback)};end`;
 
-  setStatus("Preparing to launch Windows App…");
+  // 1. Show the intent URL clearly
+  setStatus("Intent URL:<br><small>" + intentUrl + "</small>");
 
-  let countdown = 2;
+  // 2. Wait 3 seconds before starting countdown
+  setTimeout(() => {
+    let countdown = 2;
 
-  const timer = setInterval(() => {
-    countdown -= 1;
+    setStatus(`Opening Windows App in ${countdown} seconds…`);
 
-    if (countdown > 0) {
-      setStatus(`Opening Windows App in ${countdown} second…`);
-    } else {
-      clearInterval(timer);               // ⭐ FIXED
-      setStatus("Launching now…");
-      window.location.href = intentUrl;   // ⭐ SAFE REDIRECT
-    }
-  }, 1000);
+    const timer = setInterval(() => {
+      countdown -= 1;
 
-  // Show intent URL once (for debugging)
-  console.log("Intent URL:", intentUrl);
+      if (countdown > 0) {
+        setStatus(`Opening Windows App in ${countdown} second…`);
+      } else {
+        clearInterval(timer);
+        setStatus("Launching now…");
+        window.location.href = intentUrl;
+      }
+    }, 1000);
+
+  }, 3000); // <-- 3 second pause before countdown
 }
+
 
 
 
