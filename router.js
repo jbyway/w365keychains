@@ -35,7 +35,7 @@ function runSmartLink() {
 
   switch (platform) {
     case "android":
-      return openAndroid(config.android);
+      return prepareAndroid(config.android);
     case "ios":
       return openIOS(config.ios);
     default:
@@ -43,7 +43,24 @@ function runSmartLink() {
   }
 }
 
-// --- ANDROID HANDLER ---
+// --- ANDROID: ADD PAUSE + CLEAR INTENT ---
+function prepareAndroid(cfg) {
+  let countdown = 2;
+
+  setStatus(`Opening Windows App in ${countdown} seconds…`);
+
+  const timer = setInterval(() => {
+    countdown -= 1;
+
+    if (countdown > 0) {
+      setStatus(`Opening Windows App in ${countdown} second…`);
+    } else {
+      clearInterval(timer);
+      openAndroid(cfg);
+    }
+  }, 1000);
+}
+
 function openAndroid(cfg) {
   setStatus("Launching Windows App on Android…");
 
@@ -51,7 +68,7 @@ function openAndroid(cfg) {
     `intent://#Intent;scheme=${cfg.scheme};package=${cfg.package};` +
     `S.browser_fallback_url=${encodeURIComponent(cfg.fallback)};end`;
 
-  setStatus("Opening intent URL…");
+  setStatus("Redirecting now…");
   window.location.href = intentUrl;
 }
 
