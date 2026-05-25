@@ -10,7 +10,7 @@ async function runSmartLink() {
   const slug = params.get("slug");
 
   if (!slug) {
-    return window.location.href = "https://windows.cloud.microsoft.com";
+    return window.location.href = "https://windows.cloud.microsoft";
   }
 
   const configUrl =
@@ -23,7 +23,7 @@ async function runSmartLink() {
     config = await res.json();
   } catch (err) {
     console.error("Failed to load config", err);
-    return window.location.href = "https://windows.cloud.microsoft.com";
+    return window.location.href = "https://windows.cloud.microsoft";
   }
 
   const platform = getPlatform();
@@ -40,8 +40,8 @@ async function runSmartLink() {
 
 function openAndroid(cfg) {
   const scheme = cfg.scheme || "windowsapp";
-  const pkg = cfg.package || "com.microsoft.windowsapp";
-  const fallback = cfg.fallback || "https://windows.cloud.microsoft.com";
+  const pkg = cfg.package || "com.microsoft.rdc.androidx";
+  const fallback = cfg.fallback || "https://windows.cloud.microsoft";
 
   const intentUrl =
     `intent://#Intent;scheme=${scheme};package=${pkg};` +
@@ -52,7 +52,7 @@ function openAndroid(cfg) {
 
 function openIOS(cfg) {
   const app = cfg.app || "windowsapp://";
-  const fallback = cfg.fallback || "https://windows.cloud.microsoft.com";
+  const fallback = cfg.fallback || "https://windows.cloud.microsoft";
 
   window.location.href = app;
 
@@ -62,7 +62,7 @@ function openIOS(cfg) {
 }
 
 function openDesktop(url) {
-  window.location.href = url || "https://windows.cloud.microsoft.com";
+  window.location.href = url || "https://windows.cloud.microsoft";
 }
 
 document.addEventListener("DOMContentLoaded", runSmartLink);
