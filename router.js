@@ -22,7 +22,7 @@ async function runSmartLink() {
   }
 
   const configUrl =
-    `https://raw.githubusercontent.com/yourusername/smartlink/main/routes/${slug}.json`;
+    `https://raw.githubusercontent.com/jbyway/w365keychains/main/routes/${slug}.json`;
 
   let config;
 
