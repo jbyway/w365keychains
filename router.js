@@ -39,7 +39,7 @@ async function runSmartLink() {
 }
 
 function openAndroid(cfg) {
-  const scheme = cfg.scheme || "windowsapp://";
+  const scheme = cfg.scheme || "windowsapp";
   const pkg = cfg.package || "com.microsoft.rdc.androidx";
   const fallback = cfg.fallback || "https://windows.cloud.microsoft";
 
