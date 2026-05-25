@@ -1,7 +1,7 @@
 // --- STATUS DISPLAY ---
 function setStatus(msg) {
   const el = document.getElementById("status");
-  if (el) el.textContent = msg;
+  if (el) el.innerHTML = msg;
 }
 
 // --- DEVICE DETECTION ---
@@ -12,96 +12,72 @@ function getPlatform() {
   return "desktop";
 }
 
-// --- DEFAULT CONFIG ---
+// --- CONFIG (with Play Store fallback) ---
 const config = {
   android: {
     scheme: "windowsapp",
-    package: "com.microsoft.rdc.androidx",
-    fallback: "https://windows.cloud.microsoft"
+    package: "com.microsoft.windowsapp",
+    fallback: "https://play.google.com/store/apps/details?id=com.microsoft.windowsapp"
   },
   ios: {
     app: "windowsapp://",
-    fallback: "https://windows.cloud.microsoft"
+    fallback: "https://windows.cloud.microsoft.com"
   },
-  desktop: "https://windows.cloud.microsoft"
+  desktop: "https://windows.cloud.microsoft.com",
+  docs: "https://aka.ms/w365docs"
 };
 
-// --- MAIN ROUTER ---
-function runSmartLink() {
-  setStatus("Detecting platform…");
+// --- BUILD INTENT URL ---
+function buildIntentURL() {
+  return (
+    `intent://#Intent;scheme=${config.android.scheme};package=${config.android.package};` +
+    `S.browser_fallback_url=${encodeURIComponent(config.android.fallback)};end`
+  );
+}
 
+// --- MAIN LOGIC ---
+document.addEventListener("DOMContentLoaded", () => {
   const platform = getPlatform();
-  setStatus(`Platform detected: ${platform}`);
+  const intentUrl = buildIntentURL();
 
-  switch (platform) {
-    case "android":
-      return prepareAndroid(config.android);
-    case "ios":
-      return openIOS(config.ios);
-    default:
-      return openDesktop(config.desktop);
+  // Show debug info
+  setStatus(
+    `Platform detected: ${platform}<br><br>` +
+    `Intent URL:<br><small>${intentUrl}</small>`
+  );
+
+  // --- BUTTON HANDLERS ---
+  document.getElementById("launchApp").onclick = () => {
+    setStatus("Launching Windows App…");
+    window.location.href = intentUrl;
+  };
+
+  document.getElementById("launchWeb").onclick = () => {
+    setStatus("Opening Web Client…");
+    window.location.href = config.android.fallback;
+  };
+
+  document.getElementById("launchDocs").onclick = () => {
+    setStatus("Opening Windows 365 Docs…");
+    window.location.href = config.docs;
+  };
+
+  // --- AUTO-BEHAVIOR FOR iOS ---
+  if (platform === "ios") {
+    setStatus("Launching Windows App on iOS…");
+    window.location.href = config.ios.app;
+
+    setTimeout(() => {
+      setStatus("App did not open, redirecting to Web Client…");
+      window.location.href = config.ios.fallback;
+    }, 1200);
   }
-}
 
-function prepareAndroid(cfg) {
-  // No countdown here anymore
-  // Just hand off to openAndroid()
-  openAndroid(cfg);
-}
+  // --- AUTO-BEHAVIOR FOR DESKTOP ---
+  if (platform === "desktop") {
+    setStatus("Redirecting desktop user to Web Client…");
+    window.location.href = config.desktop;
+  }
+});
 
-
-function openAndroid(cfg) {
-  const intentUrl =
-    `intent://#Intent;scheme=${cfg.scheme};package=${cfg.package};` +
-    `S.browser_fallback_url=${encodeURIComponent(cfg.fallback)};end`;
-
-  // 1. Show the intent URL clearly
-  setStatus("Intent URL: " + intentUrl);
-
-  // 2. Wait 3 seconds before starting countdown
-  setTimeout(() => {
-    let countdown = 3;
-
-    setStatus(`Opening Windows App in ${countdown} seconds…`);
-
-    const timer = setInterval(() => {
-      countdown -= 1;
-
-      if (countdown > 0) {
-        setStatus(`Opening Windows App in ${countdown} second…`);
-      } else {
-        clearInterval(timer);
-        setStatus("Launching now…");
-        window.location.href = intentUrl;
-      }
-    }, 1000);
-
-  }, 10000); // <-- 3 second pause before countdown
-}
-
-
-
-
-// --- iOS HANDLER ---
-function openIOS(cfg) {
-  setStatus("Launching Windows App on iOS…");
-
-  window.location.href = cfg.app;
-
-  setStatus("Waiting to see if app opens…");
-
-  setTimeout(() => {
-    setStatus("App did not open, redirecting to fallback…");
-    window.location.href = cfg.fallback;
-  }, 1000);
-}
-
-// --- DESKTOP HANDLER ---
-function openDesktop(url) {
-  setStatus("Redirecting desktop user…");
-  window.location.href = url;
-}
-
-// --- AUTO-RUN ---
-document.addEventListener("DOMContentLoaded", runSmartLink);
 
