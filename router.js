@@ -15,7 +15,7 @@ function getPlatform() {
 // --- CONFIG (with Play Store fallback) ---
 const config = {
   android: {
-    scheme: "windowsapp://",
+    scheme: "windowsapp",
     package: "com.microsoft.rdc.androidx",
     fallback: "https://play.google.com/store/apps/details?id=com.microsoft.rdc.androidx"
   },
@@ -30,7 +30,7 @@ const config = {
 // --- BUILD INTENT URL ---
 function buildIntentURL() {
   return (
-    `intent://#Intent;scheme=${config.android.scheme};package=${config.android.package};` +
+    `intent://scan/#Intent;scheme=${config.android.scheme};package=${config.android.package};` +
     `S.browser_fallback_url=${encodeURIComponent(config.android.fallback)};end`
   );
 }
